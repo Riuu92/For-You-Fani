@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Happy Birthday 🎂</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif
+        }
+
+        body {
+            margin: 0;
+            overflow: auto;
+            background: #05010f;
+            color: white
+        }
+
+        canvas {
+            position: fixed;
+            inset: 0;
+            z-index: -1
+        }
+
+        .screen {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: .8s;
+        }
+
+        .hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(.8)
+        }
+
+        h1 {
+            font-size: 3em;
+            margin: 0;
+            text-align: center
+        }
+
+        p {
+            opacity: .8
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 30px;
+            background: linear-gradient(45deg, #c9a24d, #6b3fa0);
+            color: white;
+            font-size: 1em;
+            cursor: pointer
+        }
+
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 20px;
+            width: 100%;
+            max-width: 320px;
+        }
+
+
+        .card {
+            min-width: 220px;
+            background: rgba(255, 255, 255, .08);
+            backdrop-filter: blur(10px);
+            padding: 15px;
+            border-radius: 20px;
+            transition: .4s
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.05)
+        }
+
+        .cake {
+            font-size: 6em;
+            cursor: pointer;
+            transition: .3s
+        }
+
+        .cake:active {
+            transform: scale(.9)
+        }
+
+        .floating {
+            position: absolute;
+            animation: float 6s linear infinite
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh)
+            }
+
+            100% {
+                transform: translateY(-120vh)
+            }
+        }
+
+        .music {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            opacity: .7
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="bg"></canvas>
+
+    <div class="screen" id="screen1">
+        <h1>✨ Hari Spesial PUTRI FANI ANJANI ✨</h1>
+        <p>Sebuah kejutan untuk Putri</p>
+        <button onclick="next(1)">Mulai</button>
+    </div>
+
+    <div class="screen hidden" id="screen2">
+        <h1>🎂 Happy Birthday, Putri 🎂</h1>
+        <p>Semoga harimu seindah senyummu, penuh kebahagiaan dan cinta 🤍</p>
+        <p style="opacity:.7">🎈 Tanggal Lahir: <strong id=\"tglLahir\">18 Januari 2008</strong></p>
+        <img id="fotoPutri" src="putri.jpg" alt="Foto Putri"
+            style="width:160px;height:160px;object-fit:cover;border-radius:50%;border:4px solid rgba(255,255,255,.4);box-shadow:0 10px 25px rgba(0,0,0,.3);margin:10px 0" />
+        <div class="cake" onclick="explode();specialAnim()">🍰</div>
+        <small>(klik kue)</small>
+        <br>
+        <button onclick="next(2)">Lanjut</button>
+    </div>
+
+    <div class="screen hidden" id="screen3">
+        <h1>📖 Cerita Singkat Hari Spesial</h1>
+        <p>Pilih salah satu 💫</p>
+        <div class="timeline">
+            <div class="card" onclick="pick(1)">🌸 Tentang Hari Ini</div>
+            <div class="card" onclick="pick(2)">✨ Tentang Dirimu</div>
+            <div class="card" onclick="pick(3)">🎯 Tentang Mimpi</div>
+            <div class="card" onclick="pick(4)">❤️ Tentang Bahagia</div>
+        </div>
+        <p id="result" style="min-height:60px;opacity:.85"></p>
+        <button onclick="next(3)">Terakhir</button>
+    </div>
+
+
+
+    <div class="screen hidden" id="screen4">
+        <div style="margin-bottom:12px;opacity:.7">Dikirim dengan tulus oleh</div>
+        <h2 style="margin-top:0">— Riuu —</h2>
+        <h1>🎁 Puisi</h1>
+        <p>Di antara detik terakhir hari lama <br>
+            dan detik pertama hari yang baru, <br>
+            waktu berjalan tanpa suara, <br>
+            tapi namamu disebut oleh semesta. <br>
+            <br> <br>
+            Lampu-lampu redup, jalanan diam, <br>
+            bahkan angin seperti menahan napas. <br>
+            Namun di tengah sunyi yang dalam, <br>
+            lahirlah satu usia dengan harap yang luas. <br>
+            <br> <br>
+            Tak ada pesta, tak ada teriakan, <br>
+            hanya jam yang berdetak perlahan. <br>
+            Tapi justru di saat tak banyak yang tahu, <br>
+            hidupmu bertambah satu langkah maju. <br>
+            <br> <br>
+            Doa-doa datang tanpa keramaian, <br>
+            mengalir pelan ke dalam tujuan: <br>
+            semoga langkahmu tak mudah goyah, <br>
+            meski dunia kadang tak ramah. <br>
+            <br> <br>
+            Semoga hatimu selalu punya rumah, <br>
+            meski sering lelah di tengah arah. <br>
+            Semoga setiap jatuhmu mengajar, <br>
+            bukan mematahkan, tapi menumbuhkan sabar. <br>
+            <br> <br>
+            Jika nanti hari terasa panjang, <br>
+            dan mimpi seperti terlalu jauh di pandang, <br>
+            ingat: kamu pernah lahir kembali <br>
+            di malam yang sunyi tapi berarti. <br>
+            <br> <br>
+            Karena yang lahir tanpa sorak dan cahaya, <br>
+            biasanya tumbuh dengan jiwa yang kuat. <br>
+            Dan di tiap usiamu yang bertambah, <br>
+            semoga kamu makin berani, makin hebat. <br>
+            <br> <br>
+            Selamat ulang tahun di tengah malam, <br>
+            saat sunyi justru paling dalam. <br>
+            Semoga hidupmu penuh cerita, <br>
+            yang layak kamu banggakan sepanjang usia.
+        </p>
+        <h2>🎊 Happy Birthday, Putri 🎊</h2>
+    </div>
+
+    <audio id="music" loop>
+        <source src="lagu.mp3" type="audio/mpeg">
+    </audio>
+    <button class="music" onclick="toggleMusic()">🎵</button>
+
+    <script>
+        const screens = [screen1, screen2, screen3, screen4];
+        function next(i) {
+            screens[i - 1].classList.add('hidden');
+            screens[i].classList.remove('hidden');
+
+            // Kalau masuk screen ke-4, nyalakan musik otomatis
+            if (i === 3) {
+                const m = music;
+                m.play().then(() => {
+                    playing = true;
+                }).catch(() => {
+                    console.log("Autoplay diblokir browser");
+                });
+            }
+        }
+
+
+        function explode() {
+            for (let i = 0; i < 30; i++) {
+                let s = document.createElement('div');
+                s.textContent = '✨';
+                s.className = 'floating';
+                s.style.left = Math.random() * 100 + 'vw';
+                s.style.animationDuration = 3 + Math.random() * 5 + 's';
+                document.body.appendChild(s);
+                setTimeout(() => s.remove(), 7000);
+            }
+        }
+
+        function specialAnim() {
+            const icons = ['💖', '🌸', '✨'];
+            for (let i = 0; i < 40; i++) {
+                const d = document.createElement('div');
+                d.textContent = icons[Math.floor(Math.random() * icons.length)];
+                d.style.position = 'fixed';
+                d.style.left = Math.random() * 100 + 'vw';
+                d.style.bottom = '-40px';
+                d.style.fontSize = (16 + Math.random() * 24) + 'px';
+                d.style.opacity = .8;
+                d.style.transition = 'transform 6s linear, opacity 6s linear';
+                document.body.appendChild(d);
+                requestAnimationFrame(() => {
+                    d.style.transform = `translateY(-120vh) translateX(${(Math.random() * 200 - 100)}px)`;
+                    d.style.opacity = 0;
+                });
+                setTimeout(() => d.remove(), 6500);
+            }
+        }
+
+        let playing = false;
+        function toggleMusic() {
+            const m = music;
+            if (!playing) { m.play() } else { m.pause() }
+            playing = !playing;
+        }
+
+        // star background
+        const c = bg, ctx = c.getContext('2d');
+        function resize() { c.width = innerWidth; c.height = innerHeight }
+        resize(); onresize = resize;
+
+        let stars = Array.from({ length: 150 }, () => ({
+            x: Math.random() * c.width,
+            y: Math.random() * c.height,
+            r: Math.random() * 2
+        }));
+
+        function draw() {
+            ctx.clearRect(0, 0, c.width, c.height);
+            ctx.fillStyle = 'white';
+            stars.forEach(s => {
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.r, 0, 7);
+                ctx.fill();
+                s.y += 0.2;
+                if (s.y > c.height) s.y = 0;
+            });
+            requestAnimationFrame(draw);
+        }
+        draw();
+
+        function pick(n){
+  const r = document.getElementById("result");
+  const texts = {
+    1: "Hari ini Putri lahir dan dunia menjadi lebih indah.",
+    2: "Setiap tahun Putri tumbuh semakin kuat dan anggun.",
+    3: "Banyak mimpi indah menanti untuk diraih Putri.",
+    4: "Jangan pernah lupa untuk bahagia, Putri."
+  };
+  r.innerHTML = "✨ " + texts[n];
+  specialAnim();
+}
+
+    </script>
+
+</body>
+
+</html>
